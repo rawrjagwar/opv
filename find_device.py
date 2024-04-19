@@ -9,6 +9,3 @@ import pyvisa
 
 rm = pyvisa.ResourceManager()
 print(rm.list_resources())
-
-source = rm.open_resource('ASRL3::INSTR')
-print(source.query("*IDN?"))
