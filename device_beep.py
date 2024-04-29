@@ -11,9 +11,7 @@ import pyvisa
 
 rm = pyvisa.ResourceManager()
 
-print(rm.list_resources())
-
-# create controller as variable
+# create controller variable
 contr = rm.open_resource('ASRL3::INSTR') 
 
 # set GPIB address as 24 as default
@@ -21,14 +19,8 @@ if contr.query('++addr') != 24:
     contr.write('++auto 0')
     contr.write('++addr 24')
 
-# asking SourceMeter for identification this should be the Sourcemeter
-contr.write('++auto 1')
-print(contr.query('*IDN?'))
-
-# set the GPIB address of the controller to the switch system
+# set controller to write
 contr.write('++auto 0')
-contr.write('++addr 17')
+contr.write(':SYSTem:BEEPer 420, 1')
 
-# asking Switch System for identification
-contr.write('++auto 1')
-print(contr.query('*IDN?'))
+contr.write(':SYSTem:BEEPer 210, 1')
