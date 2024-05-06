@@ -3,6 +3,10 @@
 Created on Wed Apr 10 18:35:54 2024
 
 @author: coray
+
+Test to find connected devices with the Prologix Adapter and print their IDs
+
+Keithley 2700 used as placeholder for 7000 Series Switch System
 """
 
 import pyvisa
