@@ -10,16 +10,11 @@ import pymeasure
 
 from pymeasure.adapters import PrologixAdapter
 from pymeasure.instruments.keithley import Keithley2400
-from pymeasure.instruments.keithley import Keithley2000
+from pymeasure.instruments.keithley import Keithley2700
 
-rm = pyvisa.ResourceManager()
-print(rm.list_resources())
+adapter = PrologixAdapter('ASRL3::INSTR')
+sourcemeter = Keithley2400(adapter.gpib(24))  # at GPIB address 24
+switchsystem = Keithley2700(adapter.gpib(17))  # at GPIB address 17
 
-adapter = PrologixAdapter('ASRL3::INSTR', address=24)
-sourcemeter = Keithley2400(adapter)  # at GPIB address 24
-multimeter = Keithley2000(adapter.gpib(17))  # at GPIB address 17
-
-sourcemeter.id
-
-#contr = rm.open_resource('ASRL3::INSTR') 
-#print(contr.query('*IDN?'))
+print(sourcemeter.id)
+print(switchsystem.id)
