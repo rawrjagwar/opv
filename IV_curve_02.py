@@ -21,16 +21,16 @@ sourcemeter = Keithley2400(adapter.gpib(24))  # at GPIB address 24
 switchsystem = Keithley2750(adapter.gpib(17))  # at GPIB address 17
 
 # Variables
-data_points = 50
+data_points = 100
 averages = 10
-max_voltage = 25 # in Volts
-min_voltage = -25 # in Volts
+max_voltage = 0 # in Volts
+min_voltage = -14 # in Volts
 
 # Parameters
-voltage_range = 50 # in Volts
-compliance_current = 10e-03  # in Amps
+voltage_range = 25 # in Volts
+compliance_current = 25e-02  # in Amps
 measure_nplc = 0.1  # Number of power line cycles
-current_range = 10e-03  # in Amps
+current_range = 25e-02  # in Amps
 
 # Configure the Sourcemeter
 sourcemeter.reset()
@@ -42,7 +42,7 @@ sourcemeter.stop_buffer()
 sourcemeter.disable_buffer()
 
 # Create Arrays for Results
-voltages = np.linspace(min_voltage, max_voltage, num=data_points)
+voltages = np.linspace(max_voltage, min_voltage, num=data_points)
 currents = np.zeros_like(voltages)
 current_stds = np.zeros_like(voltages)
 
@@ -57,7 +57,7 @@ for i in range(data_points):
     sourcemeter.wait_for_buffer()
     # Record the average and standard deviation
     currents[i] = sourcemeter.mean_current
-    sleep(1.0)
+    sleep(0.5)
     current_stds[i] = sourcemeter.standard_devs[1]
 
 # Save the data columns in a CSV file
