@@ -3,6 +3,9 @@
 Created on Wed Apr 10 18:35:54 2024
 
 @author: coray
+
+Script to create an IV-Curve for one single cell, according to the parameters
+provided by ASCA. 
 """
 
 # Packages
@@ -24,7 +27,7 @@ switchsystem = Keithley2750(adapter.gpib(17))  # at GPIB address 17
 data_points = 100
 averages = 10
 max_voltage = 0 # in Volts
-min_voltage = -14 # in Volts
+min_voltage = -25 # in Volts
 
 # Parameters
 voltage_range = 25 # in Volts
