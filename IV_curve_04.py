@@ -34,9 +34,8 @@ max_voltage = 0 # in Volts
 min_voltage = -25 # in Volts
 
 # Switch System Setup
-cells = 1
-input_channels = [] # pins 13a and 15a
-output_channels = [] # pins 14a and 16a
+cell_1 = ['1!1', '1!2'] # correspond to pins 13a, 14a, 15a and 16a
+
 
 # Parameters
 voltage_range = 25 # in Volts
