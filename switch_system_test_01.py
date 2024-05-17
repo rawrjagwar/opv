@@ -34,7 +34,6 @@ cell_2_ch = '1!3, 1!4'
 test_cells_ch = [cell_1_ch, cell_2_ch]
 '''
 # Switch System Setup
-switchsystem.write(':disp:enab: OFF')
 switchsystem.write(':open all')
 switchsystem.write('*RST')
 '''

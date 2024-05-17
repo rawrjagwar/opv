@@ -4,15 +4,13 @@ Created on Wed Apr 10 18:35:54 2024
 
 @author: coray
 
-Script to create an IV-Curve for three cells.
+Script to create an IV-Curve for three cells and save the data into an 
+amalgamated dataframe to be exported into a csv file.
 
 Runs three cells through the 7001 Switch System. Closing 6 channels to 
 measure and then opening them again after completion
 
 Voltages set to lower value and fewer data points for quicker testing
-
-Data is now saved into separate csv files. This should be amalgamated into a 
-single dataframe outside of the loop and then the csv file created from that.
 """
 
 # Packages
@@ -81,19 +79,13 @@ for ch in test_cells_ch:
         currents[i] = sourcemeter.mean_current
         sleep(0.01)
         current_stds[i] = sourcemeter.standard_devs[1]
-        # Save the data columns in a CSV file
-        data = pd.DataFrame({
-            'Voltage (V)': voltages,
-            'Current (A)': currents,
-            'Current Std (A)': current_stds,
-        })
-        # Save data to a csv file
-        data.to_csv('example_'+ch+'.csv')
     switchsystem.write(':open (@ '+ ch + ')')
     sleep(2)    
 
-
+# Save data to a csv file
+data.to_csv('example_pandas_concat.csv')
 
  # Reset switch system and sourcemeter
+switchsystem.write(':open all')
 switchsystem.write('*RST')
 sourcemeter.shutdown()

@@ -4,12 +4,12 @@ Created on Wed Apr 10 18:35:54 2024
 
 @author: coray
 
-Script to create an IV-Curve for one cell, according to the parameters
-provided by ASCA.
+Script to create an IV-Curve for one cell.
 
-Runs one cell through the 7001 Switch System. Closing two sets of channels to 
+Runs one cell through the 7001 Switch System. Closing two channels to 
 measure and then opening them again after completion
 
+Voltages set to lower value and fewer data points for quicker testing
 """
 
 # Packages
@@ -28,20 +28,24 @@ sourcemeter = Keithley2400(adapter.gpib(24))  # at GPIB address 24
 switchsystem = Keithley2750(adapter.gpib(17))  # at GPIB address 17
 
 # Variables
-data_points = 100
+data_points = 10
 averages = 10
 max_voltage = 0 # in Volts
-min_voltage = -25 # in Volts
+min_voltage = -2 # in Volts
 
-# Switch System Setup
-cell_1 = ['1!1', '1!2'] # correspond to pins 13a, 14a, 15a and 16a
-
+# Switch System Variables
+cell_1_ch = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
+test_cells_ch = [cell_1_ch]
 
 # Parameters
-voltage_range = 25 # in Volts
+voltage_range = 2 # in Volts
 compliance_current = 25e-03  # in Amps
 measure_nplc = 0.1  # Number of power line cycles
 current_range = 25e-03  # in Amps
+
+# Switch System Setup
+switchsystem.write(':open all')
+switchsystem.write('*RST')
 
 # Configure the Sourcemeter
 sourcemeter.reset()
@@ -61,15 +65,19 @@ current_stds = np.zeros_like(voltages)
 sourcemeter.enable_source()
 
 # Loop through each current point, measure and record the voltage
-for i in range(data_points):
-    sourcemeter.config_buffer(averages)
-    sourcemeter.source_voltage = voltages[i]
-    sourcemeter.start_buffer()
-    sourcemeter.wait_for_buffer()
-    # Record the average and standard deviation
-    currents[i] = sourcemeter.mean_current
-    sleep(0.01)
-    current_stds[i] = sourcemeter.standard_devs[1]
+for ch in test_cells_ch:
+    switchsystem.write(':clos (@ '+ ch + ')')
+    for i in range(data_points):
+        sourcemeter.config_buffer(averages)
+        sourcemeter.source_voltage = voltages[i]
+        sourcemeter.start_buffer()
+        sourcemeter.wait_for_buffer()
+        # Record the average and standard deviation
+        currents[i] = sourcemeter.mean_current
+        sleep(0.01)
+        current_stds[i] = sourcemeter.standard_devs[1]
+    switchsystem.write(':open (@ '+ ch + ')')
+    sleep(2)    
 
 # Save the data columns in a CSV file
 data = pd.DataFrame({
