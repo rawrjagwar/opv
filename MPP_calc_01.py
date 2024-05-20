@@ -102,7 +102,6 @@ data['Power (W)'] = data['Voltage (V)'] * data['Current (A)']
 # Find the MPP Value
 mpp = data.iloc[data['Power (W)'].abs().argmax()]['Power (W)']
 
-
 # Calculate the Fill Factor
 fill_factor = mpp/(isc*max_volt)
 
