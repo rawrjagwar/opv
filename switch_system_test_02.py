@@ -31,7 +31,7 @@ switchsystem = Keithley2750(adapter.gpib(17))  # at GPIB address 17
 # Switch System Variables
 cell_1_ch = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
 cell_2_ch = '1!3, 1!4' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
-cell_3_ch = '1!5, 1!6' # channels 5 & 6 - pins
+cell_3_ch = '1!5, 1!6' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
 test_cells_ch = [cell_1_ch, cell_2_ch, cell_3_ch]
 
 # Switch System Setup

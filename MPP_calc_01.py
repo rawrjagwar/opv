@@ -11,6 +11,8 @@ Runs one cell through the 7001 Switch System. Closing two channels to
 measure and then opening them again after completion
 
 Voltages set to lower value and fewer data points for quicker testing
+
+First Test script to check calculations with dummy values
 """
 
 # Packages
@@ -88,15 +90,18 @@ data = pd.DataFrame({
     'Current Std (A)': current_stds,
 })
 
-# Finding the max. voltage where the current is closest to zero and converting to positive value
-min_current = data.iloc[data['Current (A)'].abs().argsort()[:1]]
-max_volt = min_current['Voltage (V)'].to_list()[0]*-1
-min_current = min_current['Current (A)'].to_list()[0]
-isc = data.iloc[data['Current (A)'].abs().argmax()]['Current (A)']
+
 
 # Calculating the power produced by the system to find the MPP
 # Convert Voltages to positive
 data = data.mul({'Voltage (V)': -1, 'Current (A)': 1, 'Current Std (A)': 1})
+
+# Finding the max. voltage where the current is closest to zero
+min_current = data.iloc[data['Current (A)'].abs().argsort()[:1]]
+max_volt = min_current['Voltage (V)'].to_list()[0]
+min_current = min_current['Current (A)'].to_list()[0]
+isc = data.iloc[data['Current (A)'].abs().argmax()]['Current (A)']
+
 # Create Power column and populate
 data['Power (W)'] = data['Voltage (V)'] * data['Current (A)']
 # Find the MPP Value

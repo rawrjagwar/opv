@@ -4,8 +4,8 @@ Created on Wed Apr 10 18:35:54 2024
 
 @author: coray
 
-Script to create an IV-Curve for three cells and save the data into an 
-amalgamated dataframe to be exported into a csv file.
+Script to create an IV-Curve for three cells and calculate the required values 
+for end results: Isc, Vmax, MPP, Fill Factor and eventually the Efficiency
 
 Runs three cells through the 7001 Switch System. Closing 6 channels to 
 measure and then opening them again after completion
@@ -37,7 +37,7 @@ min_voltage = -2 # in Volts
 # Switch System Variables
 cell_1_ch = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
 cell_2_ch = '1!3, 1!4' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
-cell_3_ch = '1!5, 1!6' # channels 5 & 6 - pins
+cell_3_ch = '1!5, 1!6' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
 test_cells_ch = [cell_1_ch, cell_2_ch, cell_3_ch]
 
 # Parameters
