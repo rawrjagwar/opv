@@ -10,9 +10,7 @@ produced.
 Runs one cell through the 7001 Switch System. Closing two channels to 
 measure and then opening them again after completion
 
-Voltages set to lower value and fewer data points for quicker testing
-
-Irradiation calculated using mV signal from reference cell
+Efficiency calculation added using calculated irradiation.
 """
 
 # Packages
@@ -113,8 +111,13 @@ ff = mpp/(isc*max_volt)
 ref_sig = 0.000919 # V
 ref_power = 104.749 # mV / W/m²
 stc_power = 1000 # W/m²
-irradiation = (ref_sig*1000 / ref_power) * stc_power
+irradiation = (ref_sig*1000 / ref_power)*stc_power
 
-print('\nvmax:',max_volt,'\nmpp:',mpp,'\nfill factor:',ff,'\nisc',isc,'\nirradiation:',irradiation)
+# Calculate the efficiency of the cell
+cell_area = 0.0075 # m²
+eff = mpp / (cell_area * irradiation)
+
+print('\nvmax:',max_volt,'\nmpp:',mpp,'\nfill factor:',ff,'\nisc',isc,
+      '\nirradiation:',irradiation,'\nefficiency:',eff)
 
 sourcemeter.shutdown()
