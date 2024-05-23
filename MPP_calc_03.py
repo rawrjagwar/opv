@@ -107,7 +107,12 @@ mpp = data.iloc[data['Power (W)'].argmax()]['Power (W)']
 # Calculate the Fill Factor
 ff = mpp/(isc*max_volt)
 
+# Calculate the reference solar cell irradiation
+ref_sig = 0.000919 # V
+ref_power = 104.749 # mV / W/m²
+stc_power = 1000 # W/m²
+irradiation = (ref_sig*1000 / ref_power) * stc_power
 
-print('min current:',min_current,'\nmax volt:',max_volt,'\nmpp:',mpp,'\nfill factor:',ff,'\nisc',isc)
+print('\nvmax:',max_volt,'\nmpp:',mpp,'\nfill factor:',ff,'\nisc',isc,'\nirradiation:',irradiation)
 
 sourcemeter.shutdown()

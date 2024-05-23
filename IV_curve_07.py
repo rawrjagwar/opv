@@ -14,6 +14,7 @@ Voltages set to lower value and fewer data points for quicker testing
 
 Integrated temperature loop to record temp for each cell.
 Created new channel references for the reference cell and temperature sensor
+Integrated reference cell loop to record the mV signal
 """
 
 # Packages
@@ -84,7 +85,15 @@ for ch in test_ch:
     sleep(0.1)
     
     # Reference Solar Cell loop
-    
+    switchsystem.write(':clos (@ '+ ref_cell + ')')
+    sleep(0.1)
+    sourcemeter.reset()
+    sourcemeter.use_front_terminals()
+    sourcemeter.measure_voltage()
+    sourcemeter.enable_source()
+    print(sourcemeter.voltage) # This variable should be exported to a dataframe
+    sourcemeter.disable_source()
+    switchsystem.write(':open (@ '+ ref_cell + ')')
     
     # Temperature loop
     switchsystem.write(':clos (@ '+ temp + ')')

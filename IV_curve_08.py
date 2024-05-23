@@ -14,6 +14,7 @@ Voltages set to lower value and fewer data points for quicker testing
 
 Integrated temperature loop to record temp for each cell.
 Created new channel references for the reference cell and temperature sensor
+Integrated reference cell loop to record the mV signal
 """
 
 # Packages
@@ -41,8 +42,8 @@ min_voltage = -0 # in Volts
 cell_1 = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
 cell_2 = '1!3, 1!4' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
 cell_3 = '1!5, 1!6' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
-ref_cell = '1!7, 1!8' # channels
-temp = '1!9, 1!10' # channels 
+ref_cell = '1!7, 1!8' # channels 7 & 8 - pins 21a, 18a, 8a and 10a
+temp = '1!9, 1!10' # channels 9 & 10 - pins 4b, 5b, 12b and 11b
 test_ch = {cell_1 : '1!1, 1!2', cell_2 : '1!3, 1!4', cell_3 : '1!5, 1!6'}
 
 # Parameters
@@ -60,7 +61,7 @@ voltages = np.linspace(max_voltage, min_voltage, num=data_points)
 currents = np.zeros_like(voltages)
 current_stds = np.zeros_like(voltages)
 
-# Main loop cycling through each cell
+# Main loop cycling through each cell to create IV-curve measurements
 for ch in test_ch:
     switchsystem.write(':clos (@ '+ ch + ')')
     sourcemeter.reset()
@@ -84,7 +85,15 @@ for ch in test_ch:
     sleep(0.1)
     
     # Reference Solar Cell loop
-    
+    switchsystem.write(':clos (@ '+ ref_cell + ')')
+    sleep(0.1)
+    sourcemeter.reset()
+    sourcemeter.use_front_terminals()
+    sourcemeter.measure_voltage()
+    sourcemeter.enable_source()
+    ref_sig = sourcemeter.voltage # This variable should be exported to a dataframe
+    sourcemeter.disable_source()
+    switchsystem.write(':open (@ '+ ref_cell + ')')
     
     # Temperature loop
     switchsystem.write(':clos (@ '+ temp + ')')
@@ -93,7 +102,7 @@ for ch in test_ch:
     sourcemeter.use_front_terminals()
     sourcemeter.measure_resistance()
     sourcemeter.enable_source()
-    print(sourcemeter.resistance) # This variable should be exported to a dataframe
+    temp_res = sourcemeter.resistance # This variable should be exported to a dataframe
     sourcemeter.disable_source()
     switchsystem.write(':open (@ '+ temp + ')')
     sleep(0.1)  
