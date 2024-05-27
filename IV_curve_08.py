@@ -38,12 +38,17 @@ averages = 10
 max_voltage = 0 # in Volts
 min_voltage = -0 # in Volts
 
+# Calculation Constants
+ref_power = 104.749 # mV / W/m²
+stc_power = 1000 # W/m²
+cell_area = 0.0075 # m²
+
 # Switch System Variables
-cell_1 = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
-cell_2 = '1!3, 1!4' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
-cell_3 = '1!5, 1!6' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
+cell_1 = 'cell_1' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
+cell_2 = 'cell_2' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
+cell_3 = 'cell_3' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
 ref_cell = '1!7, 1!8' # channels 7 & 8 - pins 21a, 18a, 8a and 10a
-temp = '1!9, 1!10' # channels 9 & 10 - pins 4b, 5b, 12b and 11b
+temp_sensor = '1!9, 1!10' # channels 9 & 10 - pins 4b, 5b, 12b and 11b
 test_ch = {cell_1 : '1!1, 1!2', cell_2 : '1!3, 1!4', cell_3 : '1!5, 1!6'}
 
 # Parameters
@@ -63,7 +68,7 @@ current_stds = np.zeros_like(voltages)
 
 # Main loop cycling through each cell to create IV-curve measurements
 for ch in test_ch:
-    switchsystem.write(':clos (@ '+ ch + ')')
+    switchsystem.write(':clos (@ '+ test_ch[ch] + ')')
     sourcemeter.reset()
     sourcemeter.use_front_terminals()
     sourcemeter.apply_voltage(voltage_range, compliance_current)
@@ -81,7 +86,7 @@ for ch in test_ch:
         currents[i] = sourcemeter.mean_current
         sleep(0.01)
         current_stds[i] = sourcemeter.standard_devs[1]
-    switchsystem.write(':open (@ '+ ch + ')')
+    switchsystem.write(':open (@ '+ test_ch[ch] + ')')
     sleep(0.1)
     
     # Reference Solar Cell loop
@@ -96,7 +101,7 @@ for ch in test_ch:
     switchsystem.write(':open (@ '+ ref_cell + ')')
     
     # Temperature loop
-    switchsystem.write(':clos (@ '+ temp + ')')
+    switchsystem.write(':clos (@ '+ temp_sensor + ')')
     sleep(0.1)
     sourcemeter.reset()
     sourcemeter.use_front_terminals()
@@ -104,7 +109,7 @@ for ch in test_ch:
     sourcemeter.enable_source()
     temp_res = sourcemeter.resistance # This variable should be exported to a dataframe
     sourcemeter.disable_source()
-    switchsystem.write(':open (@ '+ temp + ')')
+    switchsystem.write(':open (@ '+ temp_sensor + ')')
     sleep(0.1)  
 
 # Save data to a csv file
