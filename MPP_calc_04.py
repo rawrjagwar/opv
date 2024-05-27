@@ -35,8 +35,12 @@ max_voltage = 0 # in Volts
 min_voltage = -14 # in Volts
 
 # Switch System Variables
-cell_1_ch = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
-test_cells_ch = [cell_1_ch]
+cell_1 = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
+cell_2 = '1!3, 1!4' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
+cell_3 = '1!5, 1!6' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
+ref_cell = '1!7, 1!8' # channels 7 & 8 - pins 21a, 18a, 8a and 10a
+temp = '1!9, 1!10' # channels 9 & 10 - pins 4b, 5b, 12b and 11b
+test_ch = {cell_1 : '1!1, 1!2'}
 
 # Parameters
 voltage_range = 14 # in Volts
@@ -66,7 +70,7 @@ current_stds = np.zeros_like(voltages)
 sourcemeter.enable_source()
 
 # Loop through each current point, measure and record the voltage
-for ch in test_cells_ch:
+for ch in test_ch:
     switchsystem.write(':clos (@ '+ ch + ')')
     for i in range(data_points):
         sourcemeter.config_buffer(averages)

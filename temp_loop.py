@@ -22,8 +22,7 @@ adapter = PrologixAdapter('ASRL3::INSTR')
 sourcemeter = Keithley2400(adapter.gpib(24))  # at GPIB address 24
 switchsystem = Keithley2750(adapter.gpib(17))  # at GPIB address 17
 
-averages = 10
-measure_nplc = 1
+
 
 sourcemeter.reset()
 sourcemeter.use_front_terminals()
@@ -34,3 +33,12 @@ sourcemeter.enable_source()
 print(sourcemeter.resistance)
 
 sourcemeter.disable_source()
+
+for ch in test_ch:
+    switchsystem.write(':clos (@ '+ ch + ')')
+    sourcemeter.measure_resistance()
+    sourcemeter.enable_source()
+    print(sourcemeter.resistance)
+    sleep(0.01)
+    switchsystem.write(':open (@ '+ ch + ')')
+    sleep(2)  
