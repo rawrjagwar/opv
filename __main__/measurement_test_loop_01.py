@@ -4,11 +4,18 @@ Created on Wed May 29 17:56:58 2024
 
 @author: conor
 
-Automated measurement program for OPV Solar Cells from ASCA.
+Automated measurement program for OPV Solar Cells from ASCA for the TH Köln.
+
+Cycles through each connected Cell and creates an IV-Curve for each from which 
+the Maximum Power Point, Open Circuit Voltage and Short Circuit Current can be 
+calculated. These values are then used to calculate the Fill Factor. For each 
+cell cycle Irradiation and Temperature measurements are taken using a Reference 
+Solar Cell. Together with these measurements the Efficency can be calculated.
 
 """
 
 # Packages
+import os
 import pyvisa
 import pymeasure
 import numpy as np
@@ -41,6 +48,7 @@ cell_area = 0.0075 # m²
 res_0 = 1000
 temp_a = 0.0039083
 temp_b = -0.0000005775
+temp = 22 # temporary dummy value when testing
 
 # Switch System Variables
 cell_1 = 'cell_1' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
@@ -70,9 +78,12 @@ current_stds = np.zeros_like(voltages)
 # Create an empty dataframe to collect all results outside the loop
 final = pd.DataFrame()
 
+# Path to save results
+path = r'C:\Users\coray\Documents\GitHub\opv\__main__'
+
 # Set the time for the measurement session
 hours = 0
-minutes = 1
+minutes = 5
 
 # Calculates the total time in seconds
 timeout = (hours * 3600) + (minutes * 60) # seconds
@@ -163,8 +174,8 @@ while time.time() < timeout_start + timeout:
         # Calculate the efficiency of the cell
         eff = mpp / (cell_area * irradiation)
         
-        # Calculate the temperature from the resistance
-        temp = (-temp_a + math.sqrt((temp_a**2)-(4*temp_b*(1-(temp_res/res_0)))))/(2*temp_b)
+        # Calculate the temperature from the resistance (to be reinstated when all wired in properly)
+#        temp = (-temp_a + math.sqrt((temp_a**2)-(4*temp_b*(1-(temp_res/res_0)))))/(2*temp_b)
         
         # Create a dictionary for the results
         results = {"Timestamp" : [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
@@ -183,7 +194,7 @@ while time.time() < timeout_start + timeout:
         final = pd.concat([final,results_df], ignore_index = True)
 
 # Save data to a csv file
-final.to_csv('example_pandas_concat.csv')
+final.to_csv(os.path.join(path,'measurement_test_loop_01.csv'))
 
 # Reset switch system and sourcemeter
 switchsystem.write(':open all')
