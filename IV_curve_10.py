@@ -47,7 +47,6 @@ cell_area = 0.0075 # m²
 res_0 = 1000
 temp_a = 0.0039083
 temp_b = -0.0000005775
-temp = 22 # temporary dummy value when testing
 
 # Switch System Variables
 cell_1 = 'cell_1' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
@@ -158,7 +157,7 @@ for ch in test_ch:
     eff = mpp / (cell_area * irradiation)
     
     # Calculate the temperature from the resistance
-#    temp = (-temp_a + math.sqrt((temp_a**2)-(4*temp_b*(1-(temp_res/res_0)))))/(2*temp_b)
+    temp = (-temp_a + math.sqrt((temp_a**2)-(4*temp_b*(1-(temp_res/res_0)))))/(2*temp_b)
     
     # Create a dictionary for the results
     results = {"Timestamp" : [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
