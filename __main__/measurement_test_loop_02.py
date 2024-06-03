@@ -82,7 +82,7 @@ path = r'C:\Users\coray\Documents\GitHub\opv\__main__'
 
 # Set the time for the measurement session
 hours = 0
-minutes = 10
+minutes = 30
 
 # Calculates the total time in seconds
 timeout = (hours * 3600) + (minutes * 60) # seconds
@@ -154,27 +154,27 @@ while time.time() < timeout_start + timeout:
 
         # Finding the max. voltage where the current is closest to zero
         min_current = data.iloc[data['Current (A)'].abs().argsort()[:1]]
-        voc = min_current['Voltage (V)'].to_list()[0]
+        voc = min_current['Voltage (V)'].to_list()[0] # in V
         min_current = min_current['Current (A)'].to_list()[0]
-        isc = data.iloc[data['Current (A)'].argmax()]['Current (A)']
+        isc = data.iloc[data['Current (A)'].argmax()]['Current (A)'] # in A
 
         # Calculating the power produced by the system to find the MPP
         # Create Power column and populate
         data['Power (W)'] = data['Voltage (V)'] * data['Current (A)']
         # Find the MPP Value in W
-        mpp = data.iloc[data['Power (W)'].argmax()]['Power (W)']
+        mpp = data.iloc[data['Power (W)'].argmax()]['Power (W)'] # in W
 
         # Calculate the Fill Factor
         ff = mpp/(isc*voc)
 
         # Calculate the reference solar cell irradiation
-        irradiation = (ref_sig*1000 / ref_power)*stc_power
+        irradiation = (ref_sig*1000 / ref_power)*stc_power # in W/m²
 
         # Calculate the efficiency of the cell
-        eff = mpp / (cell_area * irradiation)
+        eff = 100 * (mpp / (cell_area * irradiation)) # in %
         
         # Calculate the temperature from the resistance (to be reinstated when all wired in properly)
-        temp = (-temp_a + math.sqrt((temp_a**2)-(4*temp_b*(1-(temp_res/res_0)))))/(2*temp_b)
+        temp = (-temp_a + math.sqrt((temp_a**2)-(4*temp_b*(1-(temp_res/res_0)))))/(2*temp_b) # in °C
         
         # Create a dictionary for the results
         results = {"Timestamp" : [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
