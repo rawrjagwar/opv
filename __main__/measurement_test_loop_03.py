@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat June 1 19:56:58 2024
+"""Created on Mon June 3 13:27:14 2024
 
 @author: conor
 
@@ -31,6 +30,8 @@ from pymeasure.instruments.keithley import Keithley2400
 from pymeasure.instruments.keithley import Keithley2750
 from datetime import datetime
 
+print('initialising opv measurements')
+
 # Instruments
 adapter = PrologixAdapter('ASRL3::INSTR')
 sourcemeter = Keithley2400(adapter.gpib(24))  # at GPIB address 24
@@ -41,6 +42,8 @@ data_points = 25
 averages = 10
 max_voltage = 0 # in Volts
 min_voltage = -14 # in Volts
+
+print('cells will be measured up to a voltage of:',abs(min_voltage),'V')
 
 # Efficiency Calculation Constants
 ref_power = 104.749 # mV / W/m²
@@ -93,6 +96,11 @@ print ('measurements will run for:', hours, 'hour(s) and', minutes, 'minute(s)')
 
 # Sets the initial time value when the program is started
 timeout_start = time.time()
+
+print('starting measurement cycle...')
+
+# counter to track measurement cycles
+counter = 0
 
 # wakepy module to stop CPU from sleeping during measurements
 with keep.running():
@@ -196,11 +204,19 @@ with keep.running():
             results_df = pd.DataFrame(data = results)
             # Export to final results DataFrame
             final = pd.concat([final,results_df], ignore_index = True)
+            # log the measurement cycle to the counter
+            counter += 1
+            print('number of measurements completed:',counter)
 
+print('measurement cycle complete \nwriting measurement results to csv file...')
 # Save data to a csv file
 final.to_csv(os.path.join(path,'measurement_test_loop_03.csv'))
 
+print('results successfully saved\nfile path:',
+      os.path.join(path,'measurement_test_loop_03.csv'))
 # Reset switch system and sourcemeter
 switchsystem.write(':open all')
 switchsystem.write('*RST')
 sourcemeter.shutdown()
+
+print('all instruments successfully shutdown \nmeasurement session ended')
