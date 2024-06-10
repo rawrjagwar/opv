@@ -88,7 +88,7 @@ path = r'C:\Users\coray\Documents\GitHub\opv\__main__'
 
 # Set the time for the measurement session
 hours = 0
-minutes = 1
+minutes = 5
 
 # Calculates the total time in seconds
 timeout = (hours * 3600) + (minutes * 60) # seconds
