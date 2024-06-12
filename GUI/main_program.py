@@ -8,6 +8,5 @@ Created on Mon Jun 10 10:10:52 2024
 # Import hello module
 import hello
 
-
 # Call function
 hello.world()
