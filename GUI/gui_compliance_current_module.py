@@ -24,7 +24,7 @@ class App(ctk.CTk):
         
 class Menu(ctk.CTkFrame):
     def __init__(self, parent):
-        self.var_1 = 20
+        self.current = 25
         super().__init__(parent)
         self.place(x = 0, y = 0, relwidth = 0.7, relheight = 1)
         
@@ -33,20 +33,20 @@ class Menu(ctk.CTkFrame):
     
     def create_widgets(self):
         
-        def segmented_button_callback(value):
+        def compliance_current_callback(value):
             print("segmented button clicked:", value)
-            self.var_1 = value
+            self.current = value
         
         def button_event():
-            Loop.action(self)
+            Compliance.current(self)
             
         menu_button1 = ctk.CTkButton(self, text = 'Button 1', command = button_event)
         
         segmented_frame = ctk.CTkFrame(self)
-        segmented_button_var = ctk.IntVar(value = 20)
-        segmented_button = ctk.CTkSegmentedButton(segmented_frame, values=[20, 50, 100],
-                                                         command=segmented_button_callback,
-                                                         variable=segmented_button_var)
+        compliance_current_var = ctk.IntVar(value = 25)
+        compliance_current_button = ctk.CTkSegmentedButton(segmented_frame, values=[25, 250, 500, 1000],
+                                                         command=compliance_current_callback,
+                                                         variable=compliance_current_var)
         
         # create the grid
         self.columnconfigure((0,1,2), weight = 1, uniform = 'a')
@@ -55,15 +55,16 @@ class Menu(ctk.CTkFrame):
         # place the widgets
         menu_button1.grid(row = 0, column = 0, stick = 'nswe', columnspan = 2)
         segmented_frame.grid(row = 1, column = 0, stick = 'nswe', columnspan = 2)
-        segmented_button.pack(side = 'left', expand = True)
+        compliance_current_button.pack(side = 'left', expand = True)
 
-class Loop():
+class Compliance():
     def __init__(self):
         super().__init__()
     
-    def action(self):
-        a = int(self.var_1)
-        a *= 2
-        print(a)
+    def current(self):
+        compliance_current = self.current / 1000
+        current_range = compliance_current
+        print('compliance current:',compliance_current)
+        print('current range:',current_range)
         
 App('class based app', (600,600))

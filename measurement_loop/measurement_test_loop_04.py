@@ -12,6 +12,9 @@ cell cycle Irradiation and Temperature measurements are taken using a Reference
 Solar Cell. Together with these measurements the Efficency can be calculated.
 
 Main loop defined as function for later use from GUI
+
+Updated file path to include date and time for unique file saves.
+Need to create a results folder to save everything in.
 """
 
 # Packages
@@ -80,7 +83,7 @@ currents = np.zeros_like(voltages)
 current_stds = np.zeros_like(voltages)
 
 # Path to save results
-path = os.getcwd()
+path = os.getcwd() # needs updating to properly find where the code is situated and output the results there
 
 # Set the time for the measurement session
 hours = 0
@@ -90,10 +93,9 @@ minutes = 3
 timeout = (hours * 3600) + (minutes * 60) # seconds
 print ('measurements will run for:', hours, 'hour(s) and', minutes, 'minute(s)')
 
-# Sets the initial time value when the program is started
-timeout_start = time.time()
-
-def measurement_loop():
+def loop():
+    # Sets the initial time value when the program is started
+    timeout_start = time.time()
     print('starting measurement cycle...')
     # Create an empty dataframe to collect all results outside the loop
     final = pd.DataFrame()
@@ -213,10 +215,10 @@ def measurement_loop():
 
     print('measurement cycle complete \nwriting measurement results to csv file...')
     # Save data to a csv file
-    final.to_csv(os.path.join(path,'measurement_test_loop_04.csv'))
+    final.to_csv(os.path.join(path, 'opv_amp_'+ datetime.now().strftime("%Y-%m-%d_%H:%M")+'.csv')) # this needs to be an iterable name that doesn't always overwrite previous results
 
     print('results successfully saved\nfile path:',
-          os.path.join(path,'measurement_test_loop_04.csv'))
+          os.path.join(path, 'opv_amp_'+ datetime.now().strftime("%Y-%m-%d_%H:%M")+'.csv'))
     # Reset switch system and sourcemeter
     switchsystem.write(':open all')
     switchsystem.write('*RST')
