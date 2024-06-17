@@ -24,7 +24,7 @@ class App(ctk.CTk):
         
 class Menu(ctk.CTkFrame):
     def __init__(self, parent):
-        self.var_1 = 20
+        self.cell = 1
         super().__init__(parent)
         self.place(x = 0, y = 0, relwidth = 0.7, relheight = 1)
         
@@ -33,20 +33,20 @@ class Menu(ctk.CTkFrame):
     
     def create_widgets(self):
         
-        def segmented_button_callback(value):
+        def cell_callback(value):
             print("segmented button clicked:", value)
-            self.var_1 = value
+            self.cell = value
         
         def button_event():
-            Loop.action(self)
+            Cell.number(self)
             
         menu_button1 = ctk.CTkButton(self, text = 'Button 1', command = button_event)
         
         segmented_frame = ctk.CTkFrame(self)
-        segmented_button_var = ctk.IntVar(value = 20)
-        segmented_button = ctk.CTkSegmentedButton(segmented_frame, values=[20, 50, 100],
-                                                         command=segmented_button_callback,
-                                                         variable=segmented_button_var)
+        cell_var = ctk.IntVar(value = 1)
+        cell_button = ctk.CTkSegmentedButton(segmented_frame, values=[1, 2, 3],
+                                                         command=cell_callback,
+                                                         variable=cell_var)
         
         # create the grid
         self.columnconfigure((0,1,2), weight = 1, uniform = 'a')
@@ -55,15 +55,24 @@ class Menu(ctk.CTkFrame):
         # place the widgets
         menu_button1.grid(row = 0, column = 0, stick = 'nswe', columnspan = 2)
         segmented_frame.grid(row = 1, column = 0, stick = 'nswe', columnspan = 2)
-        segmented_button.pack(side = 'left', expand = True)
+        cell_button.pack(side = 'left', expand = True)
 
-class Loop():
+class Cell():
     def __init__(self):
         super().__init__()
     
-    def action(self):
-        a = int(self.var_1)
-        a *= 2
-        print(a)
+    def number(self):
+        # Switch System Variables
+        cell_1 = 'cell_1' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
+        cell_2 = 'cell_2' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
+        cell_3 = 'cell_3' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
+        cell = self.cell
+        if cell == 1:
+            test_ch = {cell_1 : '1!1, 1!2'}
+        elif cell == 2:
+            test_ch = {cell_1 : '1!1, 1!2', cell_2 : '1!3, 1!4'}
+        else:
+            test_ch = {cell_1 : '1!1, 1!2', cell_2 : '1!3, 1!4', cell_3 : '1!5, 1!6'}
+        print(test_ch)
         
 App('class based app', (600,600))
