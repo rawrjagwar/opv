@@ -10,8 +10,8 @@ sys.path.append(os.getcwd())
 
 
 def loop():
-    from test_loop_print_var import VAR_A
-    print(VAR_A[0])
+
+    print('variable here')
     
-if __name__ == '__main__':
+if __name__ == "__main__":
     loop()

@@ -13,23 +13,26 @@ app = customtkinter.CTk()
 app.title("my app")
 app.geometry("600x500")
 
-VAR_A = [0]
 
 def optionmenu_callback(choice):
+    VAR_A = []
     print("optionmenu dropdown clicked:", choice)
-    VAR_A[0] = int(optionmenu.get())
+    VAR_A = int(optionmenu.get())
 
 optionmenu_var = customtkinter.StringVar(value="2")
 optionmenu = customtkinter.CTkOptionMenu(app,values=["1", "2","3"],
                                          command=optionmenu_callback,
                                          variable=optionmenu_var)
+
 def button_callback():
-    print(VAR_A[0])
+    VAR_A = int(optionmenu.get())
+    print(VAR_A)
     
     
 button = customtkinter.CTkButton(app, text="print", command=button_callback)
 
 def button_square():
+    VAR_A = int(optionmenu.get())
     VAR_A[0] += 2
     
 button_2 = customtkinter.CTkButton(app, text="add 2", command=button_square)
@@ -51,4 +54,5 @@ button_3.grid(row = 6, column=0, padx=20, pady=20)
 
 app.grid_columnconfigure(0, weight=1)
 
-app.mainloop()
+if __name__ == "__main__":
+    app.mainloop()
