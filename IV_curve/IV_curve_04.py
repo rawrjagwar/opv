@@ -28,17 +28,17 @@ sourcemeter = Keithley2400(adapter.gpib(24))  # at GPIB address 24
 switchsystem = Keithley2750(adapter.gpib(17))  # at GPIB address 17
 
 # Variables
-data_points = 10
+data_points = 50
 averages = 10
 max_voltage = 0 # in Volts
-min_voltage = -2 # in Volts
+min_voltage = -36 # in Volts
 
 # Switch System Variables
 cell_1_ch = '1!1, 1!2' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
 test_cells_ch = [cell_1_ch]
 
 # Parameters
-voltage_range = 2 # in Volts
+voltage_range = 36 # in Volts
 compliance_current = 25e-03  # in Amps
 measure_nplc = 0.1  # Number of power line cycles
 current_range = 25e-03  # in Amps

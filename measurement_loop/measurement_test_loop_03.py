@@ -176,7 +176,10 @@ with keep.running():
             data['Power (W)'] = data['Voltage (V)'] * data['Current (A)']
             # Find the MPP Value in W
             mpp = data.iloc[data['Power (W)'].argmax()]['Power (W)'] # in W
-    
+            # Voltage at MPP
+            mppv = data.iloc[data['Power (W)'].argmax()]['Voltage (V)']
+            # Current at MPP
+            mppi = data.iloc[data['Power (W)'].argmax()]['Current (A)']
             # Calculate the Fill Factor
             ff = mpp/(isc*voc)
     
@@ -194,7 +197,9 @@ with keep.running():
                     "Cell" : [ch],
                     "Isc" : [isc],
                     "Voc" : [voc],
-                    "MPP" : [mpp],  
+                    "MPP" : [mpp],
+                    "MPPv" : mppv,
+                    "MPPi" : mppi,
                     "FF" : [ff],
                     "Irradiation" : [irradiation],
                     "Efficiency" : [eff],

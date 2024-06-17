@@ -11,8 +11,7 @@ calculated. These values are then used to calculate the Fill Factor. For each
 cell cycle Irradiation and Temperature measurements are taken using a Reference 
 Solar Cell. Together with these measurements the Efficency can be calculated.
 
-Implementation of wakepy to automatically stop the CPU from turning off during 
-measurements.
+Main loop defined as function for later use from GUI
 """
 
 # Packages
@@ -41,14 +40,14 @@ switchsystem = Keithley2750(adapter.gpib(17))  # at GPIB address 17
 data_points = 50
 averages = 10
 max_voltage = 0 # in Volts
-min_voltage = -25 # in Volts
+min_voltage = -50 # in Volts
 
 print('cells will be measured up to a voltage of:',abs(min_voltage),'V')
 
 # Efficiency Calculation Constants
 ref_power = 104.749 # mV / W/m²
 stc_power = 1000 # W/m²
-cell_area = 0.0075 # m²
+cell_area = 0.1122 # m²
 
 # Temperature Calculation Constants
 RES_0 = 1000
@@ -60,12 +59,13 @@ cell_1 = 'cell_1' # channels 1 & 2 - pins 13a, 14a, 15a and 16a
 cell_2 = 'cell_2' # channels 3 & 4 - pins 6a, 7a, 12a and 11a
 cell_3 = 'cell_3' # channels 5 & 6 - pins 2a, 3a, 4a and 5a
 
-test_ch = {cell_1 : '1!1, 1!2', cell_2 : '1!3, 1!4', cell_3 : '1!5, 1!6'}
+test_ch = {cell_1 : '1!1, 1!2'#, cell_2 : '1!3, 1!4', cell_3 : '1!5, 1!6'
+           }
 ref_cell = '1!7, 1!8' # channels 7 & 8 - pins 21a, 18a, 8a and 10a
 temp_sensor = '1!9, 1!10' # channels 9 & 10 - pins 4b, 5b, 12b and 11b
 
 # Parameters
-voltage_range = 25 # in Volts
+voltage_range = 50 # in Volts
 compliance_current = 25e-03  # in Amps
 measure_nplc = 0.1  # Number of power line cycles
 current_range = 25e-03  # in Amps
@@ -80,11 +80,11 @@ currents = np.zeros_like(voltages)
 current_stds = np.zeros_like(voltages)
 
 # Path to save results
-path = r'C:\Users\coray\Documents\GitHub\opv\__main__'
+path = os.getcwd()
 
 # Set the time for the measurement session
 hours = 0
-minutes = 5
+minutes = 3
 
 # Calculates the total time in seconds
 timeout = (hours * 3600) + (minutes * 60) # seconds
@@ -173,7 +173,11 @@ def measurement_loop():
                 data['Power (W)'] = data['Voltage (V)'] * data['Current (A)']
                 # Find the MPP Value in W
                 mpp = data.iloc[data['Power (W)'].argmax()]['Power (W)'] # in W
-        
+                # Voltage at MPP
+                mppv = data.iloc[data['Power (W)'].argmax()]['Voltage (V)']
+                # Current at MPP
+                mppi = data.iloc[data['Power (W)'].argmax()]['Current (A)']
+                
                 # Calculate the Fill Factor
                 ff = mpp/(isc*voc)
         
@@ -184,18 +188,20 @@ def measurement_loop():
                 eff = 100 * (mpp / (cell_area * irradiation)) # in %
                 
                 # Calculate the temperature from the resistance 
-                temp = (-TEMP_A + math.sqrt((TEMP_A**2)-(4*TEMP_B*(1-(temp_res/RES_0)))))/(2*TEMP_B) # in °C
+                #temp = (-TEMP_A + math.sqrt((TEMP_A**2)-(4*TEMP_B*(1-(temp_res/RES_0)))))/(2*TEMP_B) # in °C
                 
                 # Create a dictionary for the results
                 results = {"Timestamp" : [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
                         "Cell" : [ch],
                         "Isc" : [isc],
                         "Voc" : [voc],
-                        "MPP" : [mpp],  
+                        "MPP" : [mpp],
+                        "MPPv" : mppv,
+                        "MPPi" : mppi,
                         "FF" : [ff],
                         "Irradiation" : [irradiation],
                         "Efficiency" : [eff],
-                        "Temperature" : [temp]
+                        #"Temperature" : [temp]
                         }
                 # Convert to a DataFrame
                 results_df = pd.DataFrame(data = results)
@@ -207,10 +213,10 @@ def measurement_loop():
 
     print('measurement cycle complete \nwriting measurement results to csv file...')
     # Save data to a csv file
-    final.to_csv(os.path.join(path,'measurement_test_loop_03.csv'))
+    final.to_csv(os.path.join(path,'measurement_test_loop_04.csv'))
 
     print('results successfully saved\nfile path:',
-          os.path.join(path,'measurement_test_loop_03.csv'))
+          os.path.join(path,'measurement_test_loop_04.csv'))
     # Reset switch system and sourcemeter
     switchsystem.write(':open all')
     switchsystem.write('*RST')
