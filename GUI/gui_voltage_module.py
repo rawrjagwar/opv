@@ -46,9 +46,7 @@ class Menu(ctk.CTkFrame):
         optionmenu_voltage = ctk.StringVar(value = "0")
         optionmenu_voltage = ctk.CTkOptionMenu(self,values=["0", "5", "10", "15", "20",
                                                        "25", "30", "35", "40", "45",
-                                                       "50", "55", "60", "65", "70",
-                                                       "75", "80", "85", "90", "95",
-                                                       "100"],
+                                                       "50", "55", "60"],
                                          command=voltage_callback,
                                          variable=optionmenu_voltage)
         
@@ -66,8 +64,9 @@ class Voltage():
         super().__init__()
     
     def voltage(self):
-        voltage = int(self.voltage)
-        print(voltage,"V")
-
+        voltage_range = int(self.voltage)
+        min_voltage = -(int(self.voltage))
+        print(voltage_range,"V")
+        print(min_voltage,"V")
         
 App('class based app', (600,600))

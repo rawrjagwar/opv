@@ -47,6 +47,8 @@ class Menu(ctk.CTkFrame):
                                                          variable=segmented_button_var)
         button_label = ctk.CTkLabel(self, text = "Compliance Current (mA)")
         
+        progressbar = ctk.CTkProgressBar(self, orientation="horizontal")
+        
         # create the grid
         self.columnconfigure((0,1,2,3), weight = 1, uniform = 'a')
         self.rowconfigure((0,1,2), weight = 1, uniform = 'a')
@@ -65,5 +67,6 @@ class Loop():
         a = int(self.var_1)
         a *= 2
         print(a)
+        
         
 App('OPV AMP', (800,600))

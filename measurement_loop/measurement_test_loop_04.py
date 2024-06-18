@@ -87,7 +87,7 @@ path = os.getcwd() # needs updating to properly find where the code is situated 
 
 # Set the time for the measurement session
 hours = 0
-minutes = 3
+minutes = 0
 
 # Calculates the total time in seconds
 timeout = (hours * 3600) + (minutes * 60) # seconds
