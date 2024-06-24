@@ -42,9 +42,9 @@ class Menu(ctk.CTkFrame):
             
         menu_button1 = ctk.CTkButton(self, text = 'Button 1', command = button_event)
         
-        segmented_frame = ctk.CTkFrame(self)
+        segmented_frame_3 = ctk.CTkFrame(self)
         data_points_var = ctk.IntVar(value = 25)
-        data_points_button = ctk.CTkSegmentedButton(segmented_frame, values=[10, 25, 50],
+        data_points_button = ctk.CTkSegmentedButton(segmented_frame_3, values=[10, 25, 50],
                                                          command=data_points_callback,
                                                          variable=data_points_var)
         
@@ -54,7 +54,7 @@ class Menu(ctk.CTkFrame):
         
         # place the widgets
         menu_button1.grid(row = 0, column = 0, stick = 'nswe', columnspan = 2)
-        segmented_frame.grid(row = 1, column = 0, stick = 'nswe', columnspan = 2)
+        segmented_frame_3.grid(row = 1, column = 0, stick = 'nswe', columnspan = 2)
         data_points_button.pack(side = 'left', expand = True)
 
 class Cell():

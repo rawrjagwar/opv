@@ -42,9 +42,9 @@ class Menu(ctk.CTkFrame):
             
         menu_button1 = ctk.CTkButton(self, text = 'Button 1', command = button_event)
         
-        segmented_frame = ctk.CTkFrame(self)
+        segmented_frame_2 = ctk.CTkFrame(self)
         compliance_current_var = ctk.IntVar(value = 25)
-        compliance_current_button = ctk.CTkSegmentedButton(segmented_frame, values=[25, 250, 500, 1000],
+        compliance_current_button = ctk.CTkSegmentedButton(segmented_frame_2, values=[25, 250, 500, 1000],
                                                          command=compliance_current_callback,
                                                          variable=compliance_current_var)
         
@@ -54,7 +54,7 @@ class Menu(ctk.CTkFrame):
         
         # place the widgets
         menu_button1.grid(row = 0, column = 0, stick = 'nswe', columnspan = 2)
-        segmented_frame.grid(row = 1, column = 0, stick = 'nswe', columnspan = 2)
+        segmented_frame_2.grid(row = 1, column = 0, stick = 'nswe', columnspan = 2)
         compliance_current_button.pack(side = 'left', expand = True)
 
 class Compliance():

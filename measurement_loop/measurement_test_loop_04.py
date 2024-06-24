@@ -93,7 +93,7 @@ minutes = 0
 timeout = (hours * 3600) + (minutes * 60) # seconds
 print ('measurements will run for:', hours, 'hour(s) and', minutes, 'minute(s)')
 
-def loop():
+def measurement_loop():
     # Sets the initial time value when the program is started
     timeout_start = time.time()
     print('starting measurement cycle...')
