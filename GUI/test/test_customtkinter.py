@@ -18,7 +18,7 @@ def button_callback():
 
 app = customtkinter.CTk()
 app.title("my app")
-app.geometry("400x150")
+app.geometry("400x500")
 
 button = customtkinter.CTkButton(app, text="square me", command=button_callback)
 #button.grid(row=2, column=0, padx=20, pady=20)
@@ -44,7 +44,7 @@ optionmenu = customtkinter.CTkOptionMenu(app,values=["1", "2","3"],
                                          command=optionmenu_callback,
                                          variable=optionmenu_var)
 
-optionmenu.grid(row=0, column=0, padx=20,pady=20)
+#optionmenu.grid(row=0, column=0, padx=20,pady=20)
 
 def combobox_callback(choice):
     print("combobox dropdown clicked:", choice)
@@ -53,7 +53,7 @@ combobox = customtkinter.CTkComboBox(app, values=["option 1", "option 2"],
                                      command=combobox_callback)
 combobox.set("option 2")
 
-combobox.grid(row=10)
+#combobox.grid(row=10)
 
 def segmented_button_callback(value):
     print("segmented button clicked:", value)
@@ -62,7 +62,7 @@ segemented_button = customtkinter.CTkSegmentedButton(app, values=["One", "Two", 
                                                      command=segmented_button_callback)
 segemented_button.set("One")
 
-segemented_button.grid(row=1, column=0)
+#segemented_button.grid(row=1, column=0)
 
 def switch_event():
     print("switch toggled, current value:", switch_var.get())
@@ -71,7 +71,13 @@ switch_var = customtkinter.StringVar(value="on")
 switch = customtkinter.CTkSwitch(app, text="Beeps", command=switch_event,
                                  variable=switch_var, onvalue="on", offvalue="off")
 
-switch.grid(row=2,column=0)
+#switch.grid(row=2,column=0)
+
+progressbar = customtkinter.CTkProgressBar(app, orientation="horizontal", mode = 'indeterminate')
+
+progressbar.grid(row = 2, columnspan = 20, pady = 20)
+
+progressbar.start()
 
 app.grid_columnconfigure(0, weight=1)
 
