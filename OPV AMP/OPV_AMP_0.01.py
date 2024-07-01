@@ -183,7 +183,7 @@ class Measurement():
         # Efficiency Calculation Constants
         ref_power = 104.749 # mV / W/m²
         stc_power = 1000 # W/m²
-        cell_area = 0.1122 # m²
+        cell_area = 0.0075 # m²
 
         # Temperature Calculation Constants
         RES_0 = 1000
@@ -335,7 +335,7 @@ class Measurement():
                         eff = 100 * (mpp / (cell_area * irradiation)) # in %
                         
                         # Calculate the temperature from the resistance 
-                        temp = (-TEMP_A + math.sqrt((TEMP_A**2)-(4*TEMP_B*(1-(temp_res/RES_0)))))/(2*TEMP_B) # in °C
+                        temp = 20#(-TEMP_A + math.sqrt((TEMP_A**2)-(4*TEMP_B*(1-(temp_res/RES_0)))))/(2*TEMP_B) # in °C
                         
                         # Create a dictionary for the results
                         results = {"Timestamp" : [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
@@ -360,10 +360,10 @@ class Measurement():
 
             print('measurement cycle complete \nwriting measurement results to csv file...')
             # Save data to a csv file
-            final.to_csv(os.path.join(path, 'opv_amp_'+ datetime.now().strftime("%Y-%m-%d_%H:%M")+'.csv')) # this needs to be an iterable name that doesn't always overwrite previous results
+            final.to_csv(os.path.join(path, 'opv_amp_'+ datetime.now().strftime("%Y-%m-%d_%H-%M")+'.csv')) # this needs to be an iterable name that doesn't always overwrite previous results
 
             print('results successfully saved\nfile path:',
-                  os.path.join(path, 'opv_amp_'+ datetime.now().strftime("%Y-%m-%d_%H:%M")+'.csv'))
+                  os.path.join(path, 'opv_amp_'+ datetime.now().strftime("%Y-%m-%d_%H-%M")+'.csv'))
             # Reset switch system and sourcemeter
             switchsystem.write(':open all')
             switchsystem.write('*RST')
