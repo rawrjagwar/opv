@@ -52,6 +52,7 @@ class Menu(ctk.CTkFrame):
     def __init__(self, parent):
         # GUI variables
         self.voltage = "0"
+        self.cell_area = 'Leaf'
         self.cell = 1
         self.current = 25
         self.data_points = 25
@@ -68,6 +69,10 @@ class Menu(ctk.CTkFrame):
         def voltage_callback(choice):
             print("voltage:", choice)
             self.voltage = choice
+        
+        def cell_area_callback(choice):
+            print("cell_type:", choice)
+            self.cell_area = choice
         
         def cell_callback(value):
             print("segmented button clicked:", value)
@@ -101,11 +106,18 @@ class Menu(ctk.CTkFrame):
                                                        "50", "55", "60"],
                                          command=voltage_callback,
                                          variable=optionmenu_voltage)
+        
         segmented_frame_1 = ctk.CTkFrame(self)
         cell_var = ctk.IntVar(value = 1)
         cell_button = ctk.CTkSegmentedButton(segmented_frame_1, values=[1, 2, 3],
                                                          command=cell_callback,
                                                          variable=cell_var)
+        
+        optionmenu_cell_area = ctk.StringVar(value = "Leaf")
+        cell_area_button = ctk.CTkOptionMenu(self, values=['Leaf', 'Diamond'],
+                                                         command=cell_callback,
+                                                         variable=optionmenu_cell_area)
+        
         segmented_frame_2 = ctk.CTkFrame(self)
         compliance_current_var = ctk.IntVar(value = 25)
         compliance_current_button = ctk.CTkSegmentedButton(segmented_frame_2, values=[25, 250, 500, 1000],
@@ -133,6 +145,7 @@ class Menu(ctk.CTkFrame):
         # create labels
         title = ctk.CTkLabel(self, text = "OPV AMP", font = ("Helvetica", 30), anchor = "center", fg_color = "transparent")
         label_cells = ctk.CTkLabel(self, text = "Number of Cells")
+        label_cell_area = ctk.CTkLabel(self, text = "Cell Type")
         label_voltage = ctk.CTkLabel(self, text = "Voltage [V]")
         label_current = ctk.CTkLabel(self, text = "Current Compliance [mA]")
         label_data_points = ctk.CTkLabel(self, text = "Data Points")
@@ -141,28 +154,30 @@ class Menu(ctk.CTkFrame):
         label_minutes = ctk.CTkLabel(self, text = "Minutes")
          # create the grid
         self.columnconfigure((4), weight = 1, uniform = 'a')
-        self.rowconfigure((0,1,2,3,4,5,6,7), weight = 1, uniform = 'a')
+        self.rowconfigure((0,1,2,3,4,5,6,7,8), weight = 1, uniform = 'a')
         
         # place the widgets and labels
         title.grid(row = 0, column = 1, columnspan = 6, sticky = "nsew")
         label_cells.grid(row = 1, column = 1, padx = 20, pady = 20)
         segmented_frame_1.grid(row = 1, column = 3, sticky = 'nswe', columnspan = 2)
         cell_button.pack(side = 'right', expand = True, pady = 20)
-        label_voltage.grid(row = 2, column = 1, padx = 20, pady = 20)
-        optionmenu_voltage.grid(row = 2, column = 3, columnspan = 3)
-        label_current.grid(row = 3, column = 1, padx = 20, pady = 20)
-        segmented_frame_2.grid(row = 3, column = 3, sticky = 'nsew', columnspan = 2)
+        label_cell_area.grid(row = 2, column = 1, padx = 20, pady = 20)
+        cell_area_button.grid(row = 2, column = 3, columnspan = 3)
+        label_voltage.grid(row = 3, column = 1, padx = 20, pady = 20)
+        optionmenu_voltage.grid(row = 3, column = 3, columnspan = 3)
+        label_current.grid(row = 4, column = 1, padx = 20, pady = 20)
+        segmented_frame_2.grid(row = 4, column = 3, sticky = 'nsew', columnspan = 2)
         compliance_current_button.pack(expand = False, pady = 20)
-        label_data_points.grid(row = 4, column = 1, padx = 20, pady = 20)
-        segmented_frame_3.grid(row = 4, column = 3, sticky = 'nswe', columnspan = 2)
+        label_data_points.grid(row = 5, column = 1, padx = 20, pady = 20)
+        segmented_frame_3.grid(row = 5, column = 3, sticky = 'nswe', columnspan = 2)
         data_points_button.pack(expand = False, pady = 20)
-        label_measurement_time.grid(row = 5, column = 1, rowspan = 2, padx = 20, pady = 20)
-        label_hours.grid(row = 5, column = 2, padx = 20, pady = 20)
-        optionmenu_hr.grid(row = 5, column = 3, columnspan = 2)
-        label_minutes.grid(row = 6, column = 2, padx = 20, pady = 20)
-        optionmenu_mi.grid(row = 6, column = 3, columnspan = 2)
+        label_measurement_time.grid(row = 6, column = 1, rowspan = 2, padx = 20, pady = 20)
+        label_hours.grid(row = 6, column = 2, padx = 20, pady = 20)
+        optionmenu_hr.grid(row = 6, column = 3, columnspan = 2)
+        label_minutes.grid(row = 7, column = 2, padx = 20, pady = 20)
+        optionmenu_mi.grid(row = 7, column = 3, columnspan = 2)
         
-        menu_button1.grid(row = 7, column = 0, stick = 'nsew', columnspan = 6)
+        menu_button1.grid(row = 8, column = 0, stick = 'nsew', columnspan = 6)
         
         
 class Measurement(): 
