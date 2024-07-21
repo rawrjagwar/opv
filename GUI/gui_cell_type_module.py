@@ -65,7 +65,6 @@ class Cell():
         if cell_area == 'Diamond':
             cell_area = 0.1122
         else:
-            
             cell_area = 0.075
         print(cell_area)
         
