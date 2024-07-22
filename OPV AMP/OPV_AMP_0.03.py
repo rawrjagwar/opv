@@ -205,7 +205,7 @@ class Measurement():
         if cell_area == 'Diamond':
             cell_area = 0.1122
         else:
-            cell_area = 0.075
+            cell_area = 0.0075
 
         # Temperature Calculation Constants
         RES_0 = 1000
