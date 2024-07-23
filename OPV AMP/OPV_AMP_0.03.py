@@ -126,7 +126,7 @@ class Menu(ctk.CTkFrame):
                                                          variable=compliance_current_var)
         segmented_frame_3 = ctk.CTkFrame(self)
         data_points_var = ctk.IntVar(value = 25)
-        data_points_button = ctk.CTkSegmentedButton(segmented_frame_3, values=[25, 50, 100, 150, 300],
+        data_points_button = ctk.CTkSegmentedButton(segmented_frame_3, values=[10, 25, 50, 100, 150],
                                                          command=data_points_callback,
                                                          variable=data_points_var)
         optionmenu_hours = ctk.StringVar(value = "0")
