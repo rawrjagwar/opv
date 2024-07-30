@@ -281,7 +281,7 @@ class Measurement():
                         sourcemeter.use_front_terminals()
                         sourcemeter.apply_voltage(voltage_range, compliance_current)
                         sourcemeter.measure_current(measure_nplc)
-                        sleep(0.1)  # wait here to give the instrument time to react
+                        sleep(0.01)  # wait here to give the instrument time to react
                         sourcemeter.stop_buffer()
                         sourcemeter.disable_buffer()
                         sourcemeter.enable_source()
@@ -295,11 +295,11 @@ class Measurement():
                             sleep(0.01)
                             current_stds[i] = sourcemeter.standard_devs[1]
                         switchsystem.write(':open (@ '+ test_ch[ch] + ')')
-                        sleep(0.1)
+                        sleep(0.01)
                         
                         # Reference Solar Cell loop
                         switchsystem.write(':clos (@ '+ ref_cell + ')')
-                        sleep(0.1)
+                        sleep(0.01)
                         sourcemeter.reset()
                         sourcemeter.write(":syst:beep:stat 0") # Disabling the beeper on the sourcemeter
                         sourcemeter.use_front_terminals()
@@ -311,7 +311,7 @@ class Measurement():
                         
                         # Temperature loop
                         switchsystem.write(':clos (@ '+ temp_sensor + ')')
-                        sleep(0.1)
+                        sleep(0.01)
                         sourcemeter.reset()
                         sourcemeter.write(":syst:beep:stat 0") # Disabling the beeper on the sourcemeter
                         sourcemeter.use_front_terminals()
@@ -320,7 +320,7 @@ class Measurement():
                         temp_res = sourcemeter.resistance # This variable should be exported to a dataframe
                         sourcemeter.disable_source()
                         switchsystem.write(':open (@ '+ temp_sensor + ')')
-                        sleep(0.1)  
+                        sleep(0.01)  
                         
                         # Create dataframe to save results
                         data = pd.DataFrame({
