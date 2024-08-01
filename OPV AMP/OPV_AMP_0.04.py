@@ -96,7 +96,21 @@ class Menu(ctk.CTkFrame):
             self.minutes = choice
     
         def start_button_event():
-            Measurement.loop(self)
+            try:
+                Measurement.loop(self)
+            except pyvisa.errors.VisaIOError as e:
+                print('Error occured:',e,'\ncheck USB cable connection')
+            
+        def test_button_event():
+            self.hours = 0
+            self.minutes = 0.017
+            try:
+                Measurement.loop(self)
+                print("Test Completed")
+            except pyvisa.errors.VisaIOError as e:
+                print('Test Failed\nError occured:',e,'\ncheck USB cable connection')
+            else:
+                print("Test Failed\nUnknown Error")
         
         # create widgets
         menu_button1 = ctk.CTkButton(self, text = 'Start Measurement Session', command = start_button_event)
@@ -132,7 +146,10 @@ class Menu(ctk.CTkFrame):
         optionmenu_hours = ctk.StringVar(value = "0")
         optionmenu_hr = ctk.CTkOptionMenu(self,values=["0", "1", "2", "3", "4",
                                                        "5", "6", "7", "8", "9",
-                                                       "10", "11", "12"],
+                                                       "10", "11", "12","13",
+                                                       "14","15","16","17","18",
+                                                       "19","20","21","22","23",
+                                                       "24"],
                                          command=hours_callback,
                                          variable=optionmenu_hours)
         
@@ -143,19 +160,23 @@ class Menu(ctk.CTkFrame):
                                          command=minutes_callback,
                                          variable=optionmenu_minutes)
         
+        test_button = ctk.CTkButton(self, text = 'Test Cycle', command = test_button_event,
+                                    fg_color="gray", hover_color="DarkCyan")
+        
         # create labels
-        title = ctk.CTkLabel(self, text = "OPV AMP", font = ("Helvetica", 30), anchor = "center", fg_color = "transparent")
-        label_cells = ctk.CTkLabel(self, text = "Number of Cells")
-        label_cell_area = ctk.CTkLabel(self, text = "Cell Type")
-        label_voltage = ctk.CTkLabel(self, text = "Voltage [V]")
-        label_current = ctk.CTkLabel(self, text = "Current Compliance [mA]")
-        label_data_points = ctk.CTkLabel(self, text = "Data Points")
-        label_measurement_time = ctk.CTkLabel(self, text = "Measurement Time")
-        label_hours = ctk.CTkLabel(self, text = "Hours")
-        label_minutes = ctk.CTkLabel(self, text = "Minutes")
+        title = ctk.CTkLabel(self, text = "OPV AMP", font = ("Arial", 30), anchor = "center", fg_color = "transparent")
+        label_cells = ctk.CTkLabel(self, text = "Number of Cells", font = ("Arial", 15))
+        label_cell_area = ctk.CTkLabel(self, text = "Cell Type", font = ("Arial", 15))
+        label_voltage = ctk.CTkLabel(self, text = "Voltage [V]", font = ("Arial", 15))
+        label_current = ctk.CTkLabel(self, text = "Current Compliance [mA]", font = ("Arial", 15))
+        label_data_points = ctk.CTkLabel(self, text = "Data Points", font = ("Arial", 15))
+        label_measurement_time = ctk.CTkLabel(self, text = "Measurement Time", font = ("Arial", 15))
+        label_hours = ctk.CTkLabel(self, text = "Hours", font = ("Arial", 15))
+        label_minutes = ctk.CTkLabel(self, text = "Minutes", font = ("Arial", 15))
+
          # create the grid
         self.columnconfigure((4), weight = 1, uniform = 'a')
-        self.rowconfigure((0,1,2,3,4,5,6,7,8), weight = 1, uniform = 'a')
+        self.rowconfigure((0,1,2,3,4,5,6,7,8,9), weight = 1, uniform = 'a')
         
         # place the widgets and labels
         title.grid(row = 0, column = 1, columnspan = 6, sticky = "nsew")
@@ -177,10 +198,10 @@ class Menu(ctk.CTkFrame):
         optionmenu_hr.grid(row = 6, column = 3, columnspan = 2)
         label_minutes.grid(row = 7, column = 2, padx = 20, pady = 20)
         optionmenu_mi.grid(row = 7, column = 3, columnspan = 2)
+        test_button.grid(row = 8, column = 1, columnspan = 4, stick = 'nsew')
+        menu_button1.grid(row = 9, column = 0, stick = 'nsew', columnspan = 6)
         
-        menu_button1.grid(row = 8, column = 0, stick = 'nsew', columnspan = 6)
-        
-        
+                
 class Measurement(): 
     def __init__(self):
         super().__init__()
