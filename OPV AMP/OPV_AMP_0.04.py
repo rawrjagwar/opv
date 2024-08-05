@@ -103,14 +103,13 @@ class Menu(ctk.CTkFrame):
             
         def test_button_event():
             self.hours = 0
-            self.minutes = 0.017
+            self.minutes = 1
             try:
                 Measurement.loop(self)
                 print("Test Completed")
             except pyvisa.errors.VisaIOError as e:
                 print('Test Failed\nError occured:',e,'\ncheck USB cable connection')
-            else:
-                print("Test Failed\nUnknown Error")
+
         
         # create widgets
         menu_button1 = ctk.CTkButton(self, text = 'Start Measurement Session', command = start_button_event)
