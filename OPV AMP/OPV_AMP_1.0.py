@@ -143,19 +143,16 @@ class Menu(ctk.CTkFrame):
                                                          command=data_points_callback,
                                                          variable=data_points_var)
         optionmenu_hours = ctk.StringVar(value = "0")
-        optionmenu_hr = ctk.CTkOptionMenu(self,values=["0", "1", "2", "3", "4",
-                                                       "5", "6", "7", "8", "9",
-                                                       "10", "11", "12","13",
-                                                       "14","15","16","17","18",
-                                                       "19","20","21","22","23",
-                                                       "24"],
+        optionmenu_hr = ctk.CTkOptionMenu(self,values=["0", "4",
+                                                        "8", "12","16","20",
+                                                       "24", "28", "32", "36", 
+                                                       "40", "44", "48"],
                                          command=hours_callback,
                                          variable=optionmenu_hours)
         
         optionmenu_minutes = ctk.StringVar(value = "0")
-        optionmenu_mi = ctk.CTkOptionMenu(self,values=["0", "5", "10", "15",
-                                                       "20", "25", "30", "35",
-                                                       "40", "45", "50", "55"],
+        optionmenu_mi = ctk.CTkOptionMenu(self,values=["0", "15",
+                                                       "30","45"],
                                          command=minutes_callback,
                                          variable=optionmenu_minutes)
         
@@ -228,7 +225,7 @@ class Measurement():
             cell_area = 0.0075
 
         # Temperature Calculation Constants
-        RES_0 = 1000
+        RES_0 = 100
         TEMP_A = 0.0039083
         TEMP_B = -0.0000005775
         
@@ -380,7 +377,8 @@ class Measurement():
                         eff = 100 * (mpp / (cell_area * irradiation)) # in %
                         
                         # Calculate the temperature from the resistance 
-                        temp = (-TEMP_A + math.sqrt((TEMP_A**2)-(4*TEMP_B*(1-(temp_res/RES_0)))))/(2*TEMP_B) # in °C
+                        temp = ((-TEMP_A + math.sqrt((TEMP_A**2)-(4*TEMP_B*(1-((temp_res-3.6)/RES_0)))))/(2*TEMP_B))-7 # in °C
+                        #temp = (temp_res-2.6-RES_0) * 0.00385
                         
                         # Create a dictionary for the results
                         results = {"Timestamp" : [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
@@ -394,7 +392,8 @@ class Measurement():
                                 "FF" : [ff],
                                 "Irradiation" : [irradiation],
                                 "Efficiency" : [eff],
-                                "Temperature" : [temp]
+                                "Temperature" : [temp],
+                                "Temp_res" : [temp_res]
                                 }
                         # Convert to a DataFrame
                         results_df = pd.DataFrame(data = results)
